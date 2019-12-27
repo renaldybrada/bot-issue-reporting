@@ -1,12 +1,11 @@
-showQuoteResult(message, context, data, options): >
-    let theQuote = context.quote.quoteText;
-    if (context.quote.quoteAuthor !== "") {
-        theQuote = context.quote.quoteText +" - "+ context.quote.quoteAuthor;
-    }
+displayIssueSummary(message, context, data, options): >
+    const briefIssue = "Issue : " + options.issue.briefIssue;
+    const detailIssue = "Detail Issue : " + options.issue.detailIssue;
+    const issuePlatform = "Platform : " + options.issue.issuePlatform.toUpperCase();
+
+    let result = briefIssue +"\n"+ detailIssue +"\n\n"+ issuePlatform;
 
     return {
-      type: "text",
-      options: {
-          text: theQuote
-      }
+      type: 'text',
+      content: result
     };

@@ -135,6 +135,7 @@ actions:
                         type: issueConfirmation
                         value: no
   showIssueSummaryAction:
-    type: text
+    type: method
+    method: displayIssueSummary
     options:
-      text: ini issue kamu $(context.briefIssue) $(context.detailIssue) $(context.issuePlatform)
+      issue: $(context)
