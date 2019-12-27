@@ -1,0 +1,44 @@
+active: true
+intents:
+    greetingIntent:
+        initial: true
+        type: text
+        classifier:
+            nlu: intent
+            match: greetingNLU
+    telegramGreetingIntent:
+        initial: true
+        type: text
+        condition: content == "/start"
+states:
+    init:
+        initial: true
+        transitions:
+            showGreeting:
+                fallback: true
+    showGreeting:
+        action:
+            -
+                name: sayHello
+            -
+                name: showMenu
+        end: true
+actions:
+    sayHello:
+        type: text
+        options:
+            text: 'Halo !'
+    showMenu:
+        type: template
+        options:
+            type: button
+            items:
+                text: Apa yang ingin anda lakukan?
+                title: askingMenu
+                actions:
+                    -
+                        type: postback
+                        label: Report Issue
+                        payload:
+                            type: mainMenu
+                            value: reportIssue

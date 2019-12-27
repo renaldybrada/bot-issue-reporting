@@ -1,0 +1,12 @@
+showQuoteResult(message, context, data, options): >
+    let theQuote = context.quote.quoteText;
+    if (context.quote.quoteAuthor !== "") {
+        theQuote = context.quote.quoteText +" - "+ context.quote.quoteAuthor;
+    }
+
+    return {
+      type: "text",
+      options: {
+          text: theQuote
+      }
+    };

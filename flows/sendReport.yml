@@ -1,0 +1,140 @@
+active: true
+intents:
+  init:
+    initial: true
+    type: data
+    condition: payload.type == "mainMenu" && payload.value == "reportIssue"
+  inputBriefIssue:
+    type: text
+    condition: content != ""
+  inputDetailIssue:
+    type: text
+    condition: content != ""
+  inputIssuePlatform:
+    type: data
+    condition: payload.type == "issuePlatform"
+  showIssueSummary:
+    type: data
+    condition: payload.type == "issueConfirmation" && payload.value == "yes"
+  reAskingIssue:
+    type: data
+    condition: payload.type == "issueConfirmation" && payload.value == "no"
+  reenter:
+    type: command
+    condition: content === "reenter"
+states:
+  init:
+    initial: true
+    transitions:
+      askBriefIssue:
+        fallback: true
+  askBriefIssue:
+    action: askBriefIssueAction
+    transitions:
+      askDetailIssue:
+        condition: intent == "inputBriefIssue"
+        mapping:
+          context:
+              briefIssue: content
+        fallback: true
+  askDetailIssue:
+    action: askDetailIssueAction
+    transitions:
+      askWhichPlatform:
+        condition: intent == "inputDetailIssue"
+        mapping:
+          context:
+              detailIssue: content
+        fallback: true
+  askWhichPlatform:
+    action: askWhichPlatformAction
+    transitions:
+      issueConfirmation:
+        condition: intent == "inputIssuePlatform"
+        fallback: true
+        mapping:
+          context:
+            issuePlatform: payload.value
+  issueConfirmation:
+    action: issueConfirmationAction
+    transitions:
+      showIssueSummary:
+        condition: intent == "showIssueSummary"
+        fallback: true
+      askBriefIssue:
+        condition: intent == "reAskingIssue"
+        fallback: true
+  showIssueSummary:
+    action: showIssueSummaryAction
+    end: true
+actions:
+  askBriefIssueAction:
+    type: text
+    options:
+      text: "Silahkan ketik issue secara singkat"
+  askDetailIssueAction:
+    type: text
+    options:
+      text: "Silahkan ketik deskripsi issue secara detail"
+  askWhichPlatformAction:
+    type: template
+    options:
+        type: button
+        items:
+            text: Pilih issue ini ada di platform apa?
+            title: askingIssuePlatform
+            actions:
+                -
+                    type: postback
+                    label: API
+                    payload:
+                        type: issuePlatform
+                        value: api
+                -
+                    type: postback
+                    label: VMS
+                    payload:
+                        type: issuePlatform
+                        value: vms
+                -
+                    type: postback
+                    label: Minishop
+                    payload:
+                        type: issuePlatform
+                        value: minishop
+                -
+                    type: postback
+                    label: Backoffice
+                    payload:
+                        type: issuePlatform
+                        value: backoffice
+                -
+                    type: postback
+                    label: BOT
+                    payload:
+                        type: issuePlatform
+                        value: bot
+  issueConfirmationAction:
+    type: template
+    options:
+        type: button
+        items:
+            text: Apakah issue yang anda inputkan sudah sesuai?
+            title: issueConfirmation
+            actions:
+                -
+                    type: postback
+                    label: Ya
+                    payload:
+                        type: issueConfirmation
+                        value: yes
+                -
+                    type: postback
+                    label: Tidak
+                    payload:
+                        type: issueConfirmation
+                        value: no
+  showIssueSummaryAction:
+    type: text
+    options:
+      text: ini issue kamu $(context.briefIssue) $(context.detailIssue) $(context.issuePlatform)

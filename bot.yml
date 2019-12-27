@@ -1,0 +1,21 @@
+name: my-bot
+flows:
+    fallback: $include(./flows/fallback.yml)
+    greeting: $include(./flows/greeting.yml)
+    sendReport: $include(./flows/sendReport.yml)
+methods: $include(./methods.yml)
+nlus:
+    intent:
+        type: keyword
+        options:
+            keywords:
+                greetingNLU:
+                    - hi
+                    - hei
+                    - hai
+                    - halo
+                    - hello
+                    - hey
+author: renaldybrada
+changelog: init
+tag: null
