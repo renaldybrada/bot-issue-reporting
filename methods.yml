@@ -3,7 +3,8 @@ displayIssueSummary(message, context, data, options): >
     const detailIssue = "Detail Issue : " + options.issue.detailIssue;
     const issuePlatform = "Platform : " + options.issue.issuePlatform.toUpperCase();
 
-    let result = briefIssue +"\n"+ detailIssue +"\n\n"+ issuePlatform;
+    let result = "Berikut rangkuman issue anda yang \n\n";
+    result = result + briefIssue +"\n"+ detailIssue +"\n"+ issuePlatform;
 
     return {
       type: 'text',

@@ -19,6 +19,12 @@ intents:
   reAskingIssue:
     type: data
     condition: payload.type == "issueConfirmation" && payload.value == "no"
+  sayThankYouIntent:
+    type: data
+    condition: payload.type == "reaskingMainMenuConfirmation" && payload.value == "no"
+  backToMainMenuIntent:
+    type: data
+    condition: payload.type == "reaskingMainMenuConfirmation" && payload.value == "yes"
   reenter:
     type: command
     condition: content === "reenter"
@@ -65,7 +71,21 @@ states:
         condition: intent == "reAskingIssue"
         fallback: true
   showIssueSummary:
-    action: showIssueSummaryAction
+    action:
+      - name: showIssueSummaryAction
+      - name: reAskingMainMenu
+    transitions:
+      sayThankYou:
+        condition: intent == "sayThankYouIntent"
+        fallback: true
+      backToMainMenu:
+        condition: intent == "backToMainMenuIntent"
+        fallback: true
+  sayThankYou:
+    action: sayThankYouAction
+    end: true
+  backToMainMenu:
+    action: backToMainMenuAction
     end: true
 actions:
   askBriefIssueAction:
@@ -139,3 +159,31 @@ actions:
     method: displayIssueSummary
     options:
       issue: $(context)
+  reAskingMainMenu:
+    type: template
+    options:
+        type: button
+        items:
+            text: Apakah ada hal lain yang bisa saya bantu?
+            title: reAskingMainMenu
+            actions:
+                -
+                    type: postback
+                    label: Ya
+                    payload:
+                        type: reaskingMainMenuConfirmation
+                        value: yes
+                -
+                    type: postback
+                    label: Tidak
+                    payload:
+                        type: reaskingMainMenuConfirmation
+                        value: no
+  sayThankYouAction:
+    type: text
+    options:
+      text: Terima kasih. Ketik 'hai' untuk memulai kembali.
+  backToMainMenuAction:
+    type: command
+    options:
+      command: backToMainMenuCommand
