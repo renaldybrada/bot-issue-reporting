@@ -1,9 +1,12 @@
 active: true
+
 fallback: true
+
 intents:
     fallbackIntent:
         type: text
         fallback: true
+
 states:
     init:
         initial: true
@@ -12,9 +15,11 @@ states:
         transitions:
             init:
                 fallback: true
+
 actions:
     showDontUnderstand:
         type: text
         options:
             text: 'Maaf, saya belum mengerti maksud anda'
+            
 methods: {}

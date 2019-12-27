@@ -1,4 +1,5 @@
 active: true
+
 intents:
     greetingIntent:
         initial: true
@@ -6,20 +7,24 @@ intents:
         classifier:
             nlu: intent
             match: greetingNLU
+
     telegramGreetingIntent:
         initial: true
         type: text
         condition: content == "/start"
+
     reaskingMainMenu:
       initial: true
       type: command
       condition: content == "backToMainMenuCommand"
+
 states:
     init:
         initial: true
         transitions:
             showGreeting:
                 fallback: true
+
     showGreeting:
         action:
             -
@@ -28,11 +33,13 @@ states:
             -
                 name: showMenu
         end: true
+
 actions:
     sayHello:
         type: text
         options:
             text: 'Halo !'
+            
     showMenu:
         type: template
         options:

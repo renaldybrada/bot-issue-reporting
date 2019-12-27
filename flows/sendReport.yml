@@ -1,39 +1,69 @@
 active: true
+
 intents:
   init:
     initial: true
     type: data
     condition: payload.type == "mainMenu" && payload.value == "reportIssue"
+
+  initByText:
+    initial: true
+    type: text
+    classifier:
+      nlu: intent
+      match: createReportNLU
+
   inputBriefIssue:
     type: text
     condition: content != ""
+
   inputDetailIssue:
     type: text
     condition: content != ""
+
   inputIssuePlatform:
     type: data
     condition: payload.type == "issuePlatform"
+
   showIssueSummary:
     type: data
     condition: payload.type == "issueConfirmation" && payload.value == "yes"
+
   reAskingIssue:
     type: data
     condition: payload.type == "issueConfirmation" && payload.value == "no"
+
   sayThankYouIntent:
     type: data
     condition: payload.type == "reaskingMainMenuConfirmation" && payload.value == "no"
+
   backToMainMenuIntent:
     type: data
     condition: payload.type == "reaskingMainMenuConfirmation" && payload.value == "yes"
+
+  yesConfirmationIntent:
+    type: text
+    classifier:
+      nlu: intent
+      match: yesConfirmationNLU
+
+  noConfirmationIntent:
+    type: text
+    classifier:
+      nlu: intent
+      match: noConfirmationNLU
+
   reenter:
     type: command
     condition: content === "reenter"
+
 states:
   init:
     initial: true
     transitions:
       askBriefIssue:
         fallback: true
+
   askBriefIssue:
     action: askBriefIssueAction
     transitions:
@@ -43,6 +73,7 @@ states:
           context:
               briefIssue: content
         fallback: true
+
   askDetailIssue:
     action: askDetailIssueAction
     transitions:
@@ -52,6 +83,7 @@ states:
           context:
               detailIssue: content
         fallback: true
+
   askWhichPlatform:
     action: askWhichPlatformAction
     transitions:
@@ -61,6 +93,7 @@ states:
         mapping:
           context:
             issuePlatform: payload.value
+
   issueConfirmation:
     action: issueConfirmationAction
     transitions:
@@ -70,6 +103,7 @@ states:
       askBriefIssue:
         condition: intent == "reAskingIssue"
         fallback: true
+
   showIssueSummary:
     action:
       - name: showIssueSummaryAction
@@ -81,21 +115,26 @@ states:
       backToMainMenu:
         condition: intent == "backToMainMenuIntent"
         fallback: true
+
   sayThankYou:
     action: sayThankYouAction
     end: true
+
   backToMainMenu:
     action: backToMainMenuAction
     end: true
+
 actions:
   askBriefIssueAction:
     type: text
     options:
       text: "Silahkan ketik issue secara singkat"
+
   askDetailIssueAction:
     type: text
     options:
       text: "Silahkan ketik deskripsi issue secara detail"
+
   askWhichPlatformAction:
     type: template
     options:
@@ -134,6 +173,7 @@ actions:
                     payload:
                         type: issuePlatform
                         value: bot
+
   issueConfirmationAction:
     type: template
     options:
@@ -154,11 +194,13 @@ actions:
                     payload:
                         type: issueConfirmation
                         value: no
+
   showIssueSummaryAction:
     type: method
     method: displayIssueSummary
     options:
       issue: $(context)
+
   reAskingMainMenu:
     type: template
     options:
@@ -179,10 +221,12 @@ actions:
                     payload:
                         type: reaskingMainMenuConfirmation
                         value: no
+
   sayThankYouAction:
     type: text
     options:
       text: Terima kasih. Ketik 'hai' untuk memulai kembali.
+
   backToMainMenuAction:
     type: command
     options:

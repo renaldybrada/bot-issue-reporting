@@ -16,6 +16,23 @@ nlus:
                     - halo
                     - hello
                     - hey
+                createReportNLU:
+                    - buat
+                    - bikin
+                    - lapor
+                    - report issue
+                yesConfirmationNLU:
+                    - mau
+                    - ya
+                    - 'yes'
+                    - ok
+                    - setuju
+                noConfirmationNLU:
+                    - tidak
+                    - 'no'
+                    - enggak
+                    - gak
+                    - ga
 author: renaldybrada
 changelog: init
 tag: null
