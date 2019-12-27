@@ -1,10 +1,14 @@
 displayIssueSummary(message, context, data, options): >
-    const briefIssue = "Issue : " + options.issue.briefIssue;
-    const detailIssue = "Detail Issue : " + options.issue.detailIssue;
-    const issuePlatform = "Platform : " + options.issue.issuePlatform.toUpperCase();
+    const briefIssue = options.issue.briefIssue;
+    const detailIssue = options.issue.detailIssue;
+    const issuePlatform = options.issue.issuePlatform.toUpperCase();
+
+    const date = new Date();
+    const codeNumber = date.getFullYear().toString().substr(2,2) + date.getMonth() + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+    const code = "#" + issuePlatform + codeNumber
 
     let result = "Berikut rangkuman issue anda yang tercatat \n\n";
-    result = result + briefIssue +"\n"+ detailIssue +"\n"+ issuePlatform;
+    result = result + "ID : " + code + "\nIssue : " + briefIssue +"\nDetail Issue : "+ detailIssue +"\nPlatform : " + issuePlatform;
 
     return {
       type: 'text',
